@@ -1,3 +1,4 @@
+import { Header } from "@/components/Header";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import Head from "next/head";
 
@@ -7,6 +8,7 @@ export default function Dashboard() {
             <Head>
                 <title>Painel - Fit Genie</title>
             </Head>
+            <Header />
         </>
     )
 }

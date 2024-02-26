@@ -2,13 +2,21 @@ import styles from './styles.module.scss';
 
 import { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> { }
+import { IconBaseProps } from 'react-icons';
+
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+    icon?: React.ComponentType<IconBaseProps>;
+}
 
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> { }
 
-export function Input({ ...props }: InputProps) {
+export function Input({ icon: Icon, ...props }: InputProps) {
     return (
-        <input type="text" className={styles.input} {...props} />
+        <div className={styles.inputWrapper} >
+            {Icon && <Icon size={20} className={styles.icon} />}
+            <input type="text" className={styles.input} {...props} />
+        </div>
     )
 }
 

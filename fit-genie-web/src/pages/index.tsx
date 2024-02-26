@@ -14,6 +14,8 @@ import Link from 'next/link';
 import { AuthContext } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import { canSSRGuest } from '../utils/canSSRGuest';
+import { RiMailLine, RiLockPasswordLine } from 'react-icons/ri';
+
 
 export default function Home() {
   const { signIn } = useContext(AuthContext); 
@@ -49,13 +51,14 @@ export default function Home() {
         </title>
       </Head>
       <div className={styles.containerCenter}>
-        <Image src={logoImg} alt="Logo Fit Genies" />
         <div className={styles.login}>
+          <Image src={logoImg} alt="Logo Fit Genies" className={styles.logo}/>
           <form onSubmit={handleLogin}>
-            <Input placeholder='Digite seu e-mail' type='text' value={email} onChange={(e) => setEmail(e.target.value) } maxLength={100} />
+            <Input icon={RiMailLine} placeholder='Digite seu e-mail' type='text' value={email} onChange={(e) => setEmail(e.target.value) } maxLength={100} required/>
             
-            <Input placeholder='Digite sua senha' type='password' value={password} onChange={(e) => setPassword(e.target.value) } maxLength={20} />
+            <Input icon={RiLockPasswordLine} placeholder='Digite sua senha' type='password' value={password} onChange={(e) => setPassword(e.target.value) } maxLength={20} required/>
 
+            
             <Button type="submit" loading={loading}>Acessar</Button>
             
             <Link href={"/signup"} className={styles.text}>

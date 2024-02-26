@@ -19,9 +19,9 @@ class LoginService {
 
         if (!user) throw new Error('Credential Error');
 
-        const passowrdMatch = await compare(password, user.password);
+        const passwordMatch = await compare(password, user.password);
 
-        if (!passowrdMatch) throw new Error('Credential Error');
+        if (!passwordMatch) throw new Error('Credential Error');
 
         const token = sign(
             {

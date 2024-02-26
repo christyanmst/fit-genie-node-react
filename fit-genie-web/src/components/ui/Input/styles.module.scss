@@ -1,14 +1,29 @@
 .input {
     margin-bottom: 1rem;
-    height: 40px;
-    border-radius: 0.5rem;
-    background-color: var(--dark-900);
-    color: var(--white);
     padding: 1rem;
-    border: 1px solid var(--gray-100);
+    width: 100%;
+    background-color: var(--white);
+    border: none;
+    border-radius: 4px;
+    color: var(--black);
+    font-weight: 500;
+    font-size: 1em;
 }
 
 .input::placeholder {
-    color: rgba(255,255,255, 0.8);
+    color: var(--black);
+}
 
+.inputWrapper {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+}
+
+.icon + .input {
+    padding-left: 3rem;
 }
