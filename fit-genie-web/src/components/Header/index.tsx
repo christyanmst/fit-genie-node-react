@@ -17,6 +17,10 @@ export function Header() {
                 </Link>
 
                 <nav className={styles.menuNav}>
+                    <Link href={"/trainingSheets"}>
+                        <span>Fichas de Treino</span>
+                    </Link>
+                    
                     <button onClick={signOut}>
                         <FiLogOut color="#FFF" size={24} />
                     </button>
