@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import 'express-async-errors';
 import cors from 'cors';
 import path from 'path';
@@ -17,7 +17,7 @@ app.use(
 );
 
 // Tratativa de erro simples, 400 ou 500
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response) => {
     if (err instanceof Error) {
         return res.status(400).json({
             error: err.message
