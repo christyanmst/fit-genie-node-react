@@ -1,1 +1,1 @@
-# fit-genie-reactnative-node
+# fit-genie-node-react
