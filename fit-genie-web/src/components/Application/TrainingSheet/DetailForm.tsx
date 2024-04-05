@@ -74,6 +74,18 @@ export default function DetailForm({ training_sheet_id }: TrainingSheetProps) {
     ]
 
     useEffect(() => {
+        const getTrainingSheetInfo = async () => {
+            try {
+                const response = await api.get(`/training-sheet/detail/${training_sheet_id}`);
+                setNameTrainingSheet(response.data[0]?.training_sheet.name);
+                setTrainingSheetItems(response.data);
+            } catch (error) {
+                Router.push('/');
+                console.log(error);
+                toast.error('Não foi possível obter informações sobre essa Ficha de Treino');
+            }
+        };
+    
         const fetchData = async () => {
             setLoading(true);
             if (training_sheet_id) {
@@ -81,23 +93,9 @@ export default function DetailForm({ training_sheet_id }: TrainingSheetProps) {
             }
             setLoading(false);
         };
-
+    
         fetchData();
     }, [training_sheet_id]);
-
-    async function getTrainingSheetInfo() {
-        try {
-            const response = await api.get(`/training-sheet/detail/${training_sheet_id}`);
-            setNameTrainingSheet(response.data[0]?.training_sheet.name);
-            setTrainingSheetItems(response.data);
-
-        } catch (error) {
-            Router.push('/');
-            console.log(error);
-            toast.error('Não foi possível obter informações sobre essa Ficha de Treino');
-        }
-    }
-
 
     async function handleRegister(event: FormEvent) {
         event.preventDefault();

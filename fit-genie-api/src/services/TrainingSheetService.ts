@@ -1,4 +1,5 @@
-import prismaClient from "../prisma";
+import { TrainingSheetRepository } from "../repository/TrainingSheetRepository";
+import { TrainingSheetItemsService } from "./TrainingSheetItemService";
 
 interface CreateTrainingSheet {
     user_id: number;
@@ -14,21 +15,14 @@ interface GetTrainingSheets {
     user_id: number;
 }
 
+const trainingSheetRepository = new TrainingSheetRepository();
+const trainingSheetItemService = new TrainingSheetItemsService();
+
 class TrainingSheetService {
     async createTrainingSheet({ user_id, name }: CreateTrainingSheet) {
         if (!(user_id && name)) throw new Error('Missing parameters');
 
-        const trainingSheet = await prismaClient.trainingSheet.create({
-            data: {
-                user_id: user_id,
-                name: name,
-            },
-            select: {
-                id: true,
-                name: true,
-                user_id: true,
-            }
-        });
+        const trainingSheet = await trainingSheetRepository.createTrainingSheet({ user_id, name });
 
         return trainingSheet;
     }
@@ -36,17 +30,10 @@ class TrainingSheetService {
     async removeTrainingSheet({ training_sheet_id }: HandleTrainingSheet) {
         if (!training_sheet_id) throw new Error('Missing parameters');
 
-        await prismaClient.trainingSheetItem.deleteMany({
-            where: {
-                training_sheet_id
-            }
-        });
-        
-        const trainingSheet = await prismaClient.trainingSheet.delete({
-            where: {
-                id: training_sheet_id,
-            }
-        });
+
+        trainingSheetItemService.removeByTrainingSheetId({ training_sheet_id });
+
+        const trainingSheet = await trainingSheetRepository.removeTrainingSheet({ training_sheet_id });
 
         return trainingSheet;
     }
@@ -54,18 +41,7 @@ class TrainingSheetService {
     async getTrainingSheets({ user_id }: GetTrainingSheets ) {
         if (!user_id) throw new Error('Missing parameters');
 
-        const trainingSheets = await prismaClient.trainingSheet.findMany({
-            where: {
-                user_id: user_id,
-            }, 
-            orderBy: {
-                created_at: 'desc',
-            },
-            select: {
-                id: true,
-                name: true,
-            }
-        });
+        const trainingSheets = await trainingSheetRepository.getTrainingSheet({ user_id });
 
         return trainingSheets;
     }
@@ -73,25 +49,7 @@ class TrainingSheetService {
     async getTrainingSheetsDetails({ training_sheet_id }: HandleTrainingSheet) {
         if (!training_sheet_id) throw new Error('Missing parameters');
         
-        const trainingSheetItemsDetails = await prismaClient.trainingSheetItem.findMany({
-            where: {
-                training_sheet_id: training_sheet_id,
-            },
-            select:{
-                id: true,
-                name: true,
-                description: true,
-                repetitions: true,
-                series: true,
-                link: true,
-                training_sheet: {
-                    select: {
-                        id: true,
-                        name: true,
-                    }
-                }
-            },
-        });
+        const trainingSheetItemsDetails = await trainingSheetItemService.getTraininingSheetItemsDetails({ training_sheet_id });
 
         return trainingSheetItemsDetails;
     }
@@ -99,14 +57,7 @@ class TrainingSheetService {
     async updateTrainingSheet({ training_sheet_id, name }: HandleTrainingSheet) {
         if (!training_sheet_id) throw new Error('Missing parameters');
 
-        const trainingSheet = await prismaClient.trainingSheet.update({
-            where: {
-                id: training_sheet_id,
-            },
-            data: {
-                name,
-            },
-        });
+        const trainingSheet = await trainingSheetRepository.updateTrainingSheet({ training_sheet_id, name });
 
         return trainingSheet;
     }
