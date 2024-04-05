@@ -1,21 +1,17 @@
-import prismaClient from "../prisma";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
+import { UserRepository } from "../repository/UserRepository";
 
 interface AuthRequest {
     email: string;
     password: string;
 }
 
+const userRepository = new UserRepository();
 class LoginService {
     async authenticate({ email, password }: AuthRequest) {
-
-        const user = await prismaClient.user.findFirst({
-            where: {
-                email: email,
-            }
-        });
-
+        
+        const user = await userRepository.findUserByEmail(email);
 
         if (!user) throw new Error('Credential Error');
 
@@ -44,15 +40,7 @@ class LoginService {
     }
 
     async myProfile(user_id: number) {
-        const user = await prismaClient.user.findFirst({
-            where: {
-                id: user_id,
-            }, select: {
-                id: true,
-                username: true,
-                email: true,
-            }
-        })
+        const user = await userRepository.findUserById(user_id);
 
         return user;
     }

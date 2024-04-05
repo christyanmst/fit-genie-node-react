@@ -1,5 +1,5 @@
-import prismaClient from "../prisma";
 import { hash } from "bcryptjs";
+import { UserRepository } from "../repository/UserRepository";
 
 interface CreateUserRequest {
     name: string;
@@ -7,36 +7,21 @@ interface CreateUserRequest {
     password: string;
 }
 
+const userRepository = new UserRepository();
 class UserService {
     async createUser({ name, email, password }: CreateUserRequest) {
         if(!(name && email && password)) throw new Error("Missing parameters");
 
-        const userAlreadyExists = await prismaClient.user.findFirst({
-            where: {
-                email: email
-            }
-        })
+        const userAlreadyExists = await userRepository.findUserByEmail(email);
 
         if (userAlreadyExists) throw new Error("User already exists");
 
         const passwordHash = await hash(password, 8);
 
-        const user = await prismaClient.user.create({
-            data: {
-                username: name,
-                email: email,
-                password: passwordHash
-            },
-            select: {
-                id: true,
-                username: true,
-                email: true,
-            }
-        })
+        const user = await userRepository.createUser({ name, email, passwordHash });
 
         return user
     }
-    // to do: update user
 }
 
 export { UserService }
