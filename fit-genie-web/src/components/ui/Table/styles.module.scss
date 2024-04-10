@@ -10,15 +10,21 @@
 .table {
     background-color: var(--dark-900);
     border-radius: 8px;
-    overflow: hidden;
+    // overflow: hidden;
+    display: block;
+    border-radius: 10px;
     border-collapse: collapse;
+    overflow-y: hidden;
+    overflow-x: auto;
+    width: 100%;
+    border-spacing: 0;
 }
+
 
 .table th,
 .table td {
     padding: 8px;
     text-align: left;
-    // border-bottom: 1px solid var(--white);
     color: var(--white);
     border: none;
 
@@ -27,14 +33,24 @@
 .table th {
     background-color: var(--white);
     color: var(--black);
+    padding: 5px 5px;
+    font-style: normal;
     font-weight: bold;
+    font-size: 12px;
+    width: 1%;
+
+    &.collapse {
+        width: 0.0000000001%;
+    }
+
+    &:last-child {
+        border-right: 0;
+    }
+
+    height: 40px;
+    white-space: nowrap;
+
 }
-
-// .table button {
-//     background-color: var(--white);
-//     margin: 0 5px;
-
-// }
 
 .buttonContainer {
     display: flex;

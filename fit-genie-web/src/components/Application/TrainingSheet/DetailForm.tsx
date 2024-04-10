@@ -96,7 +96,12 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number|
     async function handleRegister(event: FormEvent) {
         event.preventDefault();
         try {
-            if (!(nameTrainingSheet && trainingSheetItems.length)) {
+            if (!nameTrainingSheet) {
+                toast.warn("Insira o nome da Ficha de Treino")
+                return;
+            } 
+            if (!trainingSheetItems.length) {
+                toast.warn("Insira exercícios na Ficha de Treino")
                 return;
             }
 
@@ -169,7 +174,7 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number|
         setRepetitionsItem(0);
         setSeriesItem(0);
         setIdItem(null);
-        setSelectedIndex(0);
+        setSelectedIndex(null);
     }
 
     function changeEditItem(selectedIndex: number | null) {
@@ -250,7 +255,9 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number|
                 )}
 
 
-                <CustomizedTable columns={columns} data={trainingSheetItems} pageSize={15} extraBtns={true} handleDelete={handleDelete} handleEdit={handleEditItem} />
+                <div style={{ width: '100%' }}>
+                    <CustomizedTable columns={columns} data={trainingSheetItems} pageSize={15} extraBtns={true} handleDelete={handleDelete} handleEdit={handleEditItem} />
+                </div>
 
                 <button type="submit" className={styles.buttonAdd}>{training_sheet_id ? 'Editar' : 'Cadastrar'}</button>
             </form>
