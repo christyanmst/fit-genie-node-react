@@ -6,11 +6,6 @@ import Router from "next/router";
 import { CustomizedTable, TableColumns } from '@/components/ui/Table';
 import { AuthContext } from '@/contexts/AuthContext';
 
-
-interface TrainingSheetProps {
-    training_sheet_id: number | null;
-}
-
 type TrainingSheetToRemove = number[];
 
 type TrainingSheetItemDetails = {
@@ -27,7 +22,8 @@ type TrainingSheetItemDetails = {
 }[]
 
 
-export default function DetailForm({ training_sheet_id }: TrainingSheetProps) {
+export default function DetailForm(props: Readonly<{ training_sheet_id?: number|null }>) {
+    const { training_sheet_id = null } = props;
     const { user } = useContext(AuthContext);
     const [nameTrainingSheet, setNameTrainingSheet] = useState('');
 
