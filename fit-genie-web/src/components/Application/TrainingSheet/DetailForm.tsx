@@ -250,10 +250,10 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number 
                                 <textarea placeholder="Descreva o exercício..." className={styles.input} value={descriptionItem} onChange={(e) => setDescriptionItem(e.target.value)} />
                             </Box>
                         </Flex>
-                        <button className={styles.buttonAdd} onClick={() => changeEditItem(selectedIndex)}>{idItem ? 'Editar item' : 'Cadastrar item'}</button>
+                        <button type="button" className={styles.buttonAdd} onClick={() => changeEditItem(selectedIndex)}>{idItem ? 'Editar item' : 'Cadastrar item'}</button>
                     </>
                 ) : (
-                    <button className={styles.buttonAdd} onClick={() => { setIdItem(null); setShowTrainingSheetItem(true) }}>Novo exercício</button>
+                    <button type="button" className={styles.buttonAdd} onClick={() => { setIdItem(null); setShowTrainingSheetItem(true) }}>Novo exercício</button>
                 )}
 
 
