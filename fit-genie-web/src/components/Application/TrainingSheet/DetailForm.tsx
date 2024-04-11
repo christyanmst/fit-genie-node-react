@@ -54,14 +54,14 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number 
             accessor: 'description',
         },
         {
-            name: 'repetitions',
-            value: 'Repetições',
-            accessor: 'repetitions',
-        },
-        {
             name: 'series',
             value: 'Séries',
             accessor: 'series',
+        },
+        {
+            name: 'repetitions',
+            value: 'Repetições',
+            accessor: 'repetitions',
         },
         {
             name: 'link',
