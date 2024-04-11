@@ -35,9 +35,9 @@ export function ModalTrainingSheet({ isOpen, onRequestClose, trainingSheetItem }
             <div className={styles.containerModal}>
                 <h2>{`Detalhes da Ficha: ${trainingSheetItem[0].training_sheet.name}`}</h2>
 
-                {trainingSheetItem.map(item => (
+                {trainingSheetItem.map((item, index) => (
                     <section key={item.id} className={styles.containerModalItem}>
-                        <span>{item.id} - <strong>{item.name}</strong> - {item.series}x de {item.repetitions} repetições</span>
+                        <span>{index + 1} - <strong>{item.name}</strong> - {item.series}x de {item.repetitions} repetições</span>
                         {item.link && (
                             <span className={styles.modalDescription}>
                                 {item.link}
