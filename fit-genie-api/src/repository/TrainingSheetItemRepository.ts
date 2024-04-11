@@ -32,6 +32,9 @@ class TrainingSheetItemRepository {
                     }
                 }
             },
+            orderBy: {
+                name: 'asc',
+              }
         });
 
         return trainingSheetItemsDetails;

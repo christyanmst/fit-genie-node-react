@@ -33,7 +33,7 @@ class TrainingSheetRepository {
                 user_id: params.user_id,
             }, 
             orderBy: {
-                created_at: 'desc',
+                name: 'asc',
             },
             select: {
                 id: true,
