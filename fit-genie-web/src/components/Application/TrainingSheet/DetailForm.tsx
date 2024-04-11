@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Router from "next/router";
 import { CustomizedTable, TableColumns } from '@/components/ui/Table';
 import { AuthContext } from '@/contexts/AuthContext';
+import { Flex, Box } from 'reflexbox';
 
 type TrainingSheetToRemove = number[];
 
@@ -22,7 +23,7 @@ type TrainingSheetItemDetails = {
 }[]
 
 
-export default function DetailForm(props: Readonly<{ training_sheet_id?: number|null }>) {
+export default function DetailForm(props: Readonly<{ training_sheet_id?: number | null }>) {
     const { training_sheet_id = null } = props;
     const { user } = useContext(AuthContext);
     const [nameTrainingSheet, setNameTrainingSheet] = useState('');
@@ -81,7 +82,7 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number|
                 toast.error('Não foi possível obter informações sobre essa Ficha de Treino');
             }
         };
-    
+
         const fetchData = async () => {
             setLoading(true);
             if (training_sheet_id) {
@@ -89,7 +90,7 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number|
             }
             setLoading(false);
         };
-    
+
         fetchData();
     }, [training_sheet_id]);
 
@@ -99,7 +100,7 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number|
             if (!nameTrainingSheet) {
                 toast.warn("Insira o nome da Ficha de Treino")
                 return;
-            } 
+            }
             if (!trainingSheetItems.length) {
                 toast.warn("Insira exercícios na Ficha de Treino")
                 return;
@@ -179,6 +180,11 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number|
 
     function changeEditItem(selectedIndex: number | null) {
         const updatedTrainingSheetItems = [...trainingSheetItems];
+        if (!nameItem) {
+            toast.warn("Insira um nome para o exercício")
+            return;
+        }
+
 
         if (selectedIndex != null) {
             updatedTrainingSheetItems[selectedIndex] = {
@@ -222,32 +228,28 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number|
                 {showTrainingSheetItem ? (
                     <>
                         <h1 style={{ marginTop: '10px', marginBottom: '10px' }}>Exercícios da Ficha</h1>
-                        <div className={styles.exercisesInputs}>
-                            <div className={styles.inputRow}>
-                                <div>
-                                    <div>Nome do Exercício</div>
-                                    <input type="text" placeholder="Nome do Exercício" className={styles.input} value={nameItem} onChange={(e) => setNameItem(e.target.value)} />
-                                </div>
-                                <div>
-                                    <div>Séries</div>
-                                    <input type="number" placeholder="Séries" className={styles.input} value={seriesItem} onChange={(e) => setSeriesItem(Number(e.target.value))} />
-                                </div>
-                            </div>
-                            <div className={styles.inputRow}>
-                                <div>
-                                    <div>Repetições</div>
-                                    <input type="number" placeholder="Repetições" className={styles.input} value={repetitionItem} onChange={(e) => setRepetitionsItem(Number(e.target.value))} />
-                                </div>
-                                <div>
-                                    <div>Link guia do exercício</div>
-                                    <input type="text" placeholder="Link do exercício" className={styles.input} value={linkItem} onChange={(e) => setLinkItem(e.target.value)} />
-                                </div>
-                            </div>
-                            <div>
+                        <Flex className={styles.exercisesInputs} flexWrap="wrap" justifyContent="space-between" alignItems="center">
+                            <Box width={[1, 2 / 4]}>
+                                <div>Nome do Exercício</div>
+                                <input type="text" placeholder="Nome do Exercício" className={styles.input} value={nameItem} onChange={(e) => setNameItem(e.target.value)} />
+                            </Box>
+                            <Box width={[1, 1 / 5]}>
+                                <div>Séries</div>
+                                <input type="number" placeholder="Séries" className={styles.input} value={seriesItem} onChange={(e) => setSeriesItem(Number(e.target.value))} />
+                            </Box>
+                            <Box width={[1, 1 / 5]}>
+                                <div>Repetições</div>
+                                <input type="number" placeholder="Repetições" className={styles.input} value={repetitionItem} onChange={(e) => setRepetitionsItem(Number(e.target.value))} />
+                            </Box>
+                            <Box width={[1]}>
+                                <div>Link guia do exercício</div>
+                                <input type="text" placeholder="Link do exercício" className={styles.input} value={linkItem} onChange={(e) => setLinkItem(e.target.value)} />
+                            </Box>
+                            <Box width={[1]}>
                                 <div>Descreva o exercício</div>
                                 <textarea placeholder="Descreva o exercício..." className={styles.input} value={descriptionItem} onChange={(e) => setDescriptionItem(e.target.value)} />
-                            </div>
-                        </div>
+                            </Box>
+                        </Flex>
                         <button className={styles.buttonAdd} onClick={() => changeEditItem(selectedIndex)}>{idItem ? 'Editar item' : 'Cadastrar item'}</button>
                     </>
                 ) : (
