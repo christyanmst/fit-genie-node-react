@@ -49,7 +49,7 @@ export function CustomizedTable({ ...props }: NewTableProps) {
                     <tr key={row.id}>
                         {props.columns.map((x) => (
                             <td key={x.name}>
-                                {x.accessor === 'banner' ? <Image className={styles.image} width={40} height={40} alt={x.name} src={`https://fit-genie-node-react.up.railway.app/files/${row[x.accessor]}`} /> : row[x.accessor]}
+                                {typeof row[x.accessor] === 'string' && row[x.accessor].length > 20? `${row[x.accessor].substring(0, 20)}...` : row[x.accessor] }
                             </td>
                         ))}
                         {props.extraBtns && (

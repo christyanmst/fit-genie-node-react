@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Router from "next/router";
 import { CustomizedTable, TableColumns } from '@/components/ui/Table';
 import { AuthContext } from '@/contexts/AuthContext';
-import { Flex, Box } from 'reflexbox';
+import { Box, Flex } from 'rebass'
 
 type TrainingSheetToRemove = number[];
 
