@@ -10,7 +10,7 @@ import { FaSpinner } from "react-icons/fa";
 export default function SearchForm() {
     const { user } = useContext(AuthContext);
     const [checkInToday, setCheckInToday] = useState(false);
-    const [loading, setIsLoading] = useState(false);
+    const [loading, setIsLoading] = useState(true);
 
     const [data, setData] = useState([
         {
