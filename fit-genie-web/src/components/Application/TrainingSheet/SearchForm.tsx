@@ -4,8 +4,9 @@ import { toast } from 'react-toastify';
 import { api } from '@/services/apiClient';
 import { ModalTrainingSheet } from './ModalTrainingSheetItems';
 import { AuthContext } from '@/contexts/AuthContext';
-import { FaEdit, FaTrash, FaPlus, FaSpinner } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import Router from 'next/router';
+import { Loader } from '@/components/ui/Loader';
 
 type TrainingSheets = {
     id: number;
@@ -88,9 +89,7 @@ export default function SearchForm() {
                     </button>
                 </div>
                 {isLoading ? (
-                    <div className={styles.containerLoading}>
-                        <FaSpinner className={styles.spin} color="#FFF" size={40} />
-                    </div>
+                    <Loader color="#FFF" size={40}/>
                 ) : (
                     <article className={styles.listTrainingSheets}>
                         {trainingSheets.map((x) => (

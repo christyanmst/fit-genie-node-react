@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "@/contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { api } from "@/services/apiClient";
-import { FaSpinner } from "react-icons/fa";
+import { Loader } from "@/components/ui/Loader";
 
 export default function SearchForm() {
     const { user } = useContext(AuthContext);
@@ -143,7 +143,7 @@ export default function SearchForm() {
 
             }}>
                 {isLoading ? (
-                    <FaSpinner className={styles.spin} color="#009D9A" size={40} />
+                    <Loader color="#009D9A" size={40} />
                 ) : (
                     <ResponsiveContainer>
                         <BarChart

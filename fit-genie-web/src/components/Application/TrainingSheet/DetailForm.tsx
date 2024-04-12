@@ -6,7 +6,7 @@ import Router from "next/router";
 import { CustomizedTable, TableColumns } from '@/components/ui/Table';
 import { AuthContext } from '@/contexts/AuthContext';
 import { Box, Flex } from 'rebass'
-import { FaSpinner } from 'react-icons/fa';
+import { Loader } from '@/components/ui/Loader';
 
 type TrainingSheetToRemove = number[];
 
@@ -227,9 +227,7 @@ export default function DetailForm(props: Readonly<{ training_sheet_id?: number 
             <h1>{training_sheet_id ? 'Editar Ficha de Treino' : 'Nova Ficha de Treino'}</h1>
             {
                 isLoading ? (
-                    <div className={styles.containerLoading}>
-                        <FaSpinner className={styles.spin} color="#009D9A" size={40} />
-                    </div>
+                    <Loader color="#009D9A" size={40} />
                 ) : (
                     <form className={styles.form} onSubmit={(e) => training_sheet_id ? handleEdit(e) : handleRegister(e)}>
                         <input type="text" placeholder="Nome da Ficha de Treino" className={styles.input} value={nameTrainingSheet} onChange={(e) => setNameTrainingSheet(e.target.value)} />
