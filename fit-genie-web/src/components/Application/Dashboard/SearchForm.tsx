@@ -2,72 +2,119 @@ import { Flex } from "rebass";
 import { BarChart, XAxis, YAxis, Bar, ResponsiveContainer, Tooltip } from "recharts";
 import styles from './styles.module.scss';
 import { toast } from "react-toastify";
+import { AuthContext } from "@/contexts/AuthContext";
+import { useContext, useEffect, useState } from "react";
+import { api } from "@/services/apiClient";
 
 export default function SearchForm() {
-    const data = [
+    const { user } = useContext(AuthContext);
+    const [ checkInToday, setCheckInToday ] = useState(false);
+
+    const [data, setData] = useState([
         {
             "name": "Jan",
-            "uv": 15,
+            "Quantidade": 0,
         },
         {
             "name": "Fev",
-            "uv": 30,
+            "Quantidade": 0,
         },
         {
             "name": "Mar",
-            "uv": 25,
+            "Quantidade": 0,
         },
         {
             "name": "Abr",
-            "uv": 0,
+            "Quantidade": 0,
         },
         {
             "name": "Mai",
-            "uv": 0,
+            "Quantidade": 0,
         },
         {
             "name": "Jun",
-            "uv": 0,
+            "Quantidade": 0,
         },
         {
             "name": "Jul",
-            "uv": 0,
+            "Quantidade": 0,
         },
         {
             "name": "Ago",
-            "uv": 0,
+            "Quantidade": 0,
         },
         {
             "name": "Set",
-            "uv": 0,
+            "Quantidade": 0,
         },
         {
             "name": "Out",
-            "uv": 0,
+            "Quantidade": 0,
         },
         {
             "name": "Nov",
-            "uv": 0,
+            "Quantidade": 0,
         },
         {
             "name": "Dez",
-            "uv": 0,
+            "Quantidade": 0,
         },
-    ]
+    ])
+
+    useEffect(() => {
+        if (user?.id) {
+            const fetchData = async () => {
+                try {
+                    const response = await api.get(`/verify-checkIn-today/${user.id}`);
+                    const checkInHist = await api.get(`/checkIn-hist/${user.id}`);
+                    handleCheckInHist(checkInHist.data?.checkInHist);
+                    setCheckInToday(!!response.data);
+                } catch (error) {
+                    console.log(error);
+                    toast.error('Não foi possível verificar o check-in');
+                }
+            }
+            fetchData();
+        }
+    }, [user?.id])
+
+    async function handleCheckIn() {
+        if (user?.id) {
+            if (checkInToday) {
+                return toast.warn("Você já fez check-in hoje!")
+            }
+            try {
+                await api.post(`/checkIn`, {
+                    userId: user.id,
+                });
+                setCheckInToday(true);
+                toast.success('Check-In feito com sucesso!');
+            } catch (error) {
+                console.log(error);
+                toast.error('Não foi possível fazer o check-in')
+            }
+        }
+    }
+
+    function handleCheckInHist(checkInHist: any){
+        const newData = data.map((month, index) => ({
+            name: month.name,
+            Quantidade: checkInHist[(index + 1)],
+        }));
+
+        setData(newData);
+    }
+
 
     return (
         <>
-            <h3 style={{
-                textAlign: 'center',
-                color: 'white',
-                marginTop: '50px'
-            }}>Em implementação!</h3>
             <h4 style={{
                 textAlign: 'center',
                 color: 'white',
+                marginTop: '10px',
 
             }}>Gráfico de Check-in</h4>
-            <Flex width={[1, 4 / 5, 3 / 4, 3 / 4, 1 / 2]} style={{
+            <Flex width={[1, 4 / 5, 3 / 4, 1 / 2, 1 / 2]} style={{
                 margin: '1rem auto',
                 height: 300,
                 backgroundColor: '#FFF',
@@ -90,14 +137,14 @@ export default function SearchForm() {
                         }}
                     >
                         <XAxis dataKey="name" />
-                        <YAxis />
+                        <YAxis ticks={[0, 5, 10, 15, 20, 25, 30]}/>
                         <Tooltip />
-                        <Bar type="monotone" dataKey="uv" fill="#009D9A" />
+                        <Bar type="monotone" dataKey="Quantidade" fill="#009D9A" />
                     </BarChart>
                 </ResponsiveContainer>
             </Flex>
             <Flex justifyContent={"center"}>
-                <button type="button" className={styles.buttonCheckIn} onClick={() => toast.warn("Ainda não implementado")}>{'Check-in'}</button>
+                <button type="button" className={styles.buttonCheckIn} onClick={() => handleCheckIn()}>{'Fazer Check-in'}</button>
             </Flex>
         </>
     )

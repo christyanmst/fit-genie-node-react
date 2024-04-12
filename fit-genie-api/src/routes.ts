@@ -5,6 +5,7 @@ import { LoginController } from "./controllers/LoginController";
 import { TrainingSheetController } from "./controllers/TrainingSheetController";
 import { TrainingSheetItemController } from "./controllers/TrainingSheetItemController";
 import { isAuthenticated } from "./middlewares/isAuthenticated";
+import { CheckInHistController } from "./controllers/CheckInHistController";
 
 
 const router = Router();
@@ -13,6 +14,7 @@ const userController = new UserController();
 const loginController = new LoginController();
 const trainingSheetController = new TrainingSheetController();
 const trainingSheetItemController = new TrainingSheetItemController();
+const checkInHistController = new CheckInHistController();
 
 
 // User
@@ -33,5 +35,10 @@ router.put('/training-sheet/update', isAuthenticated, trainingSheetController.up
 router.post('/training-sheet-item', isAuthenticated, trainingSheetItemController.createTrainingSheetItems);
 router.put('/training-sheet-item/update', isAuthenticated, trainingSheetItemController.updateTrainingSheetItems);
 router.delete('/training-sheet-item/delete', isAuthenticated, trainingSheetItemController.removeTrainingSheetItems);
+
+// Check In History
+router.post('/checkIn', isAuthenticated, checkInHistController.createCheckIn);
+router.get('/checkIn-hist/:userId', isAuthenticated, checkInHistController.getCheckInHist);
+router.get('/verify-checkIn-today/:userId', isAuthenticated, checkInHistController.verifyCheckInToday);
 
 export { router };

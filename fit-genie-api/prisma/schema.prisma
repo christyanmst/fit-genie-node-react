@@ -23,6 +23,7 @@ model User {
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
   training_sheets TrainingSheet[]
+  checkin_hist CheckInHist[]
 
   @@map("users")
 }
@@ -52,4 +53,12 @@ model TrainingSheetItem {
   training_sheet TrainingSheet @relation(fields: [training_sheet_id], references: [id])
 
   @@map("training_sheets_items")
+}
+
+model CheckInHist {
+  id                   Int       @id @default(autoincrement())
+  user_id    Int
+  created_at           DateTime? @default(now())
+  user User @relation(fields: [user_id], references: [id])
+  @@map("checkin_hist")
 }
