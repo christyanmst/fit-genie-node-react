@@ -1,16 +1,3 @@
-.containerSearchForm {
-    max-width: 720px;
-    margin: 4rem auto;
-    padding: 0 2rem;
-
-    display: flex;
-    flex-direction: column;
-}
-
-.containerSearchForm h1 {
-    color: var(--white)
-}
-
 .containerHeader {
     display: flex;
     flex-direction: row;
@@ -113,7 +100,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    margin-left: 10px; /* Espaçamento entre os botões */
+    margin-left: 10px; 
 }
 
 .addButton {
@@ -151,6 +138,10 @@
     justify-content: space-between;
     flex-direction: column;
 
+    h1 {
+        color: var(--white);
+    }
+
     .buttonSearchForm {
         width: 200px;
         height: 40px;
@@ -177,7 +168,6 @@
 .container h1 {
     color: var(--white);
 }
-
 
 .form {
     display: flex;
@@ -221,22 +211,22 @@
     .buttonAdd {
         height: 40px;
         border: 0;
-        background-color: var(--green-900);
+        background-color: var(--green-800);
         font-weight: bold;
         font-size: 1.2rem;
         border-radius: 0.3rem;
-        color: var(--dark-700);
+        color: var(--white);
         margin-top: 20px;
         margin-bottom: 20px;
+        border-bottom: 2px solid var(--white);
     }
 
     .exercisesInputs {
         color: var(--white);
-        gap: 5px;
+        gap: 10px;
     }
-    .inputRow {
-        display: flex;
-        justify-content: space-between;
+    .inputLabel {
+        padding: 0px 3px 5px;
     }
 }
 

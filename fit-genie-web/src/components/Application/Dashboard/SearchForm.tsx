@@ -10,7 +10,7 @@ import { FaSpinner } from "react-icons/fa";
 export default function SearchForm() {
     const { user } = useContext(AuthContext);
     const [checkInToday, setCheckInToday] = useState(false);
-    const [loading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [data, setData] = useState([
         {
@@ -92,14 +92,21 @@ export default function SearchForm() {
                 return toast.warn("Você já fez check-in hoje!")
             }
             try {
+                setIsLoading(true);
                 await api.post(`/checkIn`, {
                     userId: user.id,
                 });
                 setCheckInToday(true);
                 toast.success('Check-In feito com sucesso!');
+                const month = new Date().getMonth();
+                data[month].Quantidade += 1;
             } catch (error) {
                 console.log(error);
                 toast.error('Não foi possível fazer o check-in')
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 800);
             }
         }
     }
@@ -135,7 +142,7 @@ export default function SearchForm() {
                 alignItems: 'center'
 
             }}>
-                {loading ? (
+                {isLoading ? (
                     <FaSpinner className={styles.spin} color="#009D9A" size={40} />
                 ) : (
                     <ResponsiveContainer>
@@ -158,7 +165,7 @@ export default function SearchForm() {
 
             </Flex>
             <Flex justifyContent={"center"}>
-                <button disabled={loading} type="button" className={styles.buttonCheckIn} onClick={() => handleCheckIn()}>{'Fazer Check-in'}</button>
+                <button disabled={isLoading} type="button" className={styles.buttonCheckIn} onClick={() => handleCheckIn()}>{'Fazer Check-in'}</button>
             </Flex>
         </>
     )

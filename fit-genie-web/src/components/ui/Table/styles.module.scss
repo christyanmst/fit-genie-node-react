@@ -8,15 +8,16 @@
 }
 
 .table {
-    background-color: var(--dark-900);
-    border-radius: 8px;
+    border-top: 3px solid var(--white);
+    background-color: var(--gray-200);
+    border-radius: 3px 3px 10px 10px;
     display: block;
-    border-radius: 10px;
     border-collapse: collapse;
     overflow-y: hidden;
     overflow-x: auto;
     width: 100%;
     border-spacing: 0;
+    white-space: nowrap;
 }
 
 
@@ -30,8 +31,7 @@
 }
 
 .table th {
-    background-color: var(--white);
-    color: var(--black);
+    color: var(--white);
     padding: 5px 5px;
     font-style: normal;
     font-weight: bold;
