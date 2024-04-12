@@ -5,10 +5,12 @@ import { toast } from "react-toastify";
 import { AuthContext } from "@/contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { api } from "@/services/apiClient";
+import { FaSpinner } from "react-icons/fa";
 
 export default function SearchForm() {
     const { user } = useContext(AuthContext);
-    const [ checkInToday, setCheckInToday ] = useState(false);
+    const [checkInToday, setCheckInToday] = useState(false);
+    const [loading, setIsLoading] = useState(false);
 
     const [data, setData] = useState([
         {
@@ -65,13 +67,19 @@ export default function SearchForm() {
         if (user?.id) {
             const fetchData = async () => {
                 try {
+                    setIsLoading(true);
                     const response = await api.get(`/verify-checkIn-today/${user.id}`);
                     const checkInHist = await api.get(`/checkIn-hist/${user.id}`);
                     handleCheckInHist(checkInHist.data?.checkInHist);
                     setCheckInToday(response.data?.checkInToday);
+
                 } catch (error) {
                     console.log(error);
                     toast.error('Não foi possível verificar o check-in');
+                } finally {
+                    setTimeout(() => {
+                        setIsLoading(false);
+                    }, 800);
                 }
             }
             fetchData();
@@ -96,7 +104,7 @@ export default function SearchForm() {
         }
     }
 
-    function handleCheckInHist(checkInHist: any){
+    function handleCheckInHist(checkInHist: any) {
         const newData = data.map((month, index) => ({
             name: month.name,
             Quantidade: checkInHist[(index + 1)],
@@ -119,32 +127,38 @@ export default function SearchForm() {
                 height: 300,
                 backgroundColor: '#FFF',
                 display: 'flex',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
                 flexDirection: 'column',
                 borderRadius: '10px',
                 borderBottom: '3px solid #009D9A',
-                fontSize: '10px'
+                fontSize: '10px',
+                alignItems: 'center'
 
-                }}>
-                <ResponsiveContainer>
-                    <BarChart
-                        data={data}
-                        margin={{
-                            top: 10,
-                            right: 30,
-                            left: -20,
-                            bottom: 0,
-                        }}
-                    >
-                        <XAxis dataKey="name" />
-                        <YAxis ticks={[0, 5, 10, 15, 20, 25, 30]}/>
-                        <Tooltip />
-                        <Bar type="monotone" dataKey="Quantidade" fill="#009D9A" />
-                    </BarChart>
-                </ResponsiveContainer>
+            }}>
+                {loading ? (
+                    <FaSpinner className={styles.spin} color="#009D9A" size={40} />
+                ) : (
+                    <ResponsiveContainer>
+                        <BarChart
+                            data={data}
+                            margin={{
+                                top: 10,
+                                right: 30,
+                                left: -20,
+                                bottom: 0,
+                            }}
+                        >
+                            <XAxis dataKey="name" />
+                            <YAxis ticks={[0, 5, 10, 15, 20, 25, 30]} />
+                            <Tooltip />
+                            <Bar type="monotone" dataKey="Quantidade" fill="#009D9A" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                )}
+
             </Flex>
             <Flex justifyContent={"center"}>
-                <button type="button" className={styles.buttonCheckIn} onClick={() => handleCheckIn()}>{'Fazer Check-in'}</button>
+                <button disabled={loading} type="button" className={styles.buttonCheckIn} onClick={() => handleCheckIn()}>{'Fazer Check-in'}</button>
             </Flex>
         </>
     )
