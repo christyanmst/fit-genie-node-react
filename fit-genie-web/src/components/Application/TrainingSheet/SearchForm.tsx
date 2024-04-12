@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { api } from '@/services/apiClient';
 import { ModalTrainingSheet } from './ModalTrainingSheetItems';
 import { AuthContext } from '@/contexts/AuthContext';
-import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaSpinner } from 'react-icons/fa';
 import Router from 'next/router';
 
 type TrainingSheets = {
@@ -29,7 +29,7 @@ export type TrainingSheetItems = {
 export default function SearchForm() {
     const { user } = useContext(AuthContext);
     const [trainingSheets, setTrainingSheets] = useState<TrainingSheets>([]);
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [modalItem, setModalItem] = useState<TrainingSheetItems>([]);
     const [modalItemVisible, setModalItemVisible] = useState(false);
 
@@ -37,10 +37,8 @@ export default function SearchForm() {
     useEffect(() => {
         if (user) {
             const fetchData = async () => {
-                setLoading(true);
 
                 await getTrainingSheets(user?.id);
-                setLoading(false);
             };
 
             fetchData();
@@ -49,11 +47,16 @@ export default function SearchForm() {
 
     async function getTrainingSheets(user_id: number) {
         try {
+            setIsLoading(true);
             const response = await api.get(`/training-sheet/user/${user_id}`);
             const trainingSheets: TrainingSheets = response.data;
             setTrainingSheets(trainingSheets);
         } catch (error) {
             toast.error('Erro ao obter fichas de treino');
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 800);
         }
     }
 
@@ -65,10 +68,6 @@ export default function SearchForm() {
         setModalItemVisible(true);
     }
 
-    async function handleEditTrainingSheet(id: number) {
-
-    }
-
     async function handleDeleteTrainingSheet(id: number) {
         try {
             await api.delete(`/training-sheet/delete/${id}`);
@@ -76,7 +75,7 @@ export default function SearchForm() {
             setTrainingSheets(prevTrainingSheets => prevTrainingSheets.filter(trainingSheet => trainingSheet.id !== id))
         } catch (error) {
             toast.error('Não foi possível deletar a ficha de treino');
-        } 
+        }
     }
 
     return (
@@ -88,27 +87,32 @@ export default function SearchForm() {
                         <FaPlus className={styles.addButton} onClick={() => Router.push('/trainingSheets/create')} />
                     </button>
                 </div>
-
-                <article className={styles.listTrainingSheets}>
-                    {trainingSheets.map((x) => (
-                        <section key={x.id} className={styles.trainingSheetItem}>
-                            <div className={styles.trainingSheetContent}>
-                                <button onClick={() => handleOpenModalView(x.id)}>
-                                    <div className={styles.tag} />
-                                    <span>{x.name}</span>
-                                </button>
-                                <div className={styles.actions}>
-                                    <button className={styles.editButton}>
-                                        <FaEdit onClick={(() => Router.push(`/trainingSheets/update/${x.id}`))}/>
+                {isLoading ? (
+                    <div className={styles.containerLoading}>
+                        <FaSpinner className={styles.spin} color="#FFF" size={40} />
+                    </div>
+                ) : (
+                    <article className={styles.listTrainingSheets}>
+                        {trainingSheets.map((x) => (
+                            <section key={x.id} className={styles.trainingSheetItem}>
+                                <div className={styles.trainingSheetContent}>
+                                    <button onClick={() => handleOpenModalView(x.id)}>
+                                        <div className={styles.tag} />
+                                        <span>{x.name}</span>
                                     </button>
-                                    <button className={styles.deleteButton}>
-                                        <FaTrash onClick={() => handleDeleteTrainingSheet(x.id) }/>
-                                    </button>
+                                    <div className={styles.actions}>
+                                        <button className={styles.editButton}>
+                                            <FaEdit onClick={(() => Router.push(`/trainingSheets/update/${x.id}`))} />
+                                        </button>
+                                        <button className={styles.deleteButton}>
+                                            <FaTrash onClick={() => handleDeleteTrainingSheet(x.id)} />
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </section>
-                    ))}
-                </article>
+                            </section>
+                        ))}
+                    </article>
+                )}
             </div>
 
             {modalItemVisible && <ModalTrainingSheet isOpen={modalItemVisible} onRequestClose={() => setModalItemVisible(false)} trainingSheetItem={modalItem} />}
