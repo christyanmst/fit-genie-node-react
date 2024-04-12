@@ -65,10 +65,10 @@ export default function SearchForm() {
         if (user?.id) {
             const fetchData = async () => {
                 try {
-                    const response: { data: boolean } = await api.get(`/verify-checkIn-today/${user.id}`);
+                    const response = await api.get(`/verify-checkIn-today/${user.id}`);
                     const checkInHist = await api.get(`/checkIn-hist/${user.id}`);
                     handleCheckInHist(checkInHist.data?.checkInHist);
-                    setCheckInToday(response.data);
+                    setCheckInToday(response.data?.checkInToday);
                 } catch (error) {
                     console.log(error);
                     toast.error('Não foi possível verificar o check-in');
