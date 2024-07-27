@@ -63,4 +63,4 @@ class TrainingSheetService {
     }
 }
 
-export { TrainingSheetService }; 
+export { TrainingSheetService };

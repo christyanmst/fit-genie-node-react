@@ -10,7 +10,6 @@ class CheckInHistController {
 
         const checkIn = await checkInHistService.createCheckIn({ userId });
 
-
         return res.json({ checkIn });
     }
 

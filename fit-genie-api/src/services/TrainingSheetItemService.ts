@@ -21,7 +21,6 @@ class TrainingSheetItemsService {
     async createTrainingSheetItems({ training_sheet_id, items }: HandleTrainingSheetItems) {
         if (!(training_sheet_id && items.length)) throw new Error('Missing parameters');
 
-
         for (const item of items) {
             await trainingSheetItemRepository.createTrainingSheetItem({ training_sheet_id, item });
         }
@@ -31,7 +30,6 @@ class TrainingSheetItemsService {
 
     async updateTrainingSheetItems({ items }: HandleTrainingSheetItems) {
         if (!items.length) throw new Error('Missing parameters');
-
 
         for (const item of items) {
             await trainingSheetItemRepository.updateTrainingSheetItem({ item });
