@@ -65,6 +65,16 @@ export default function SearchForm() {
 
     useEffect(() => {
         if (user?.id) {
+
+            const handleCheckInHist  = (checkInHist: any) => {
+                const newData = data.map((month, index) => ({
+                    name: month.name,
+                    Quantidade: checkInHist[(index + 1)],
+                }));
+        
+                setData(newData);
+            };
+
             const fetchData = async () => {
                 try {
                     setIsLoading(true);
@@ -84,7 +94,7 @@ export default function SearchForm() {
             }
             fetchData();
         }
-    }, [user?.id])
+    }, [user?.id, data])
 
     async function handleCheckIn() {
         if (user?.id) {
@@ -110,16 +120,6 @@ export default function SearchForm() {
             }
         }
     }
-
-    function handleCheckInHist(checkInHist: any) {
-        const newData = data.map((month, index) => ({
-            name: month.name,
-            Quantidade: checkInHist[(index + 1)],
-        }));
-
-        setData(newData);
-    }
-
 
     return (
         <>
