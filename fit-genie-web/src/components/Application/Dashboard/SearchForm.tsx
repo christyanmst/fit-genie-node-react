@@ -65,16 +65,16 @@ export default function SearchForm() {
 
     useEffect(() => {
         if (user?.id) {
-
+    
             const handleCheckInHist  = (checkInHist: any) => {
-                const newData = data.map((month, index) => ({
-                    name: month.name,
-                    Quantidade: checkInHist[(index + 1)],
-                }));
-        
-                setData(newData);
+                setData(prevData => 
+                    prevData.map((month, index) => ({
+                        name: month.name,
+                        Quantidade: checkInHist[(index + 1)],
+                    }))
+                );
             };
-
+    
             const fetchData = async () => {
                 try {
                     setIsLoading(true);
@@ -82,7 +82,6 @@ export default function SearchForm() {
                     const checkInHist = await api.get(`/checkIn-hist/${user.id}`);
                     handleCheckInHist(checkInHist.data?.checkInHist);
                     setCheckInToday(response.data?.checkInToday);
-
                 } catch (error) {
                     console.log(error);
                     toast.error('Não foi possível verificar o check-in');
@@ -94,7 +93,7 @@ export default function SearchForm() {
             }
             fetchData();
         }
-    }, [user?.id, data])
+    }, [user?.id]);
 
     async function handleCheckIn() {
         if (user?.id) {
