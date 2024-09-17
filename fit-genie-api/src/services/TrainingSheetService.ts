@@ -1,5 +1,4 @@
-import { TrainingSheetRepository } from "../repository/TrainingSheetRepository";
-import { TrainingSheetItemsService } from "./TrainingSheetItemService";
+import { mediator } from "../mediator/AppMediator";
 
 interface CreateTrainingSheet {
     user_id: number;
@@ -15,14 +14,11 @@ interface GetTrainingSheets {
     user_id: number;
 }
 
-const trainingSheetRepository = new TrainingSheetRepository();
-const trainingSheetItemService = new TrainingSheetItemsService();
-
 class TrainingSheetService {
     async createTrainingSheet({ user_id, name }: CreateTrainingSheet) {
         if (!(user_id && name)) throw new Error('Missing parameters');
 
-        const trainingSheet = await trainingSheetRepository.createTrainingSheet({ user_id, name });
+        const trainingSheet = await mediator.publish('trainingSheet:create', { user_id, name });
 
         return trainingSheet;
     }
@@ -30,18 +26,17 @@ class TrainingSheetService {
     async removeTrainingSheet({ training_sheet_id }: HandleTrainingSheet) {
         if (!training_sheet_id) throw new Error('Missing parameters');
 
+        await mediator.publish('trainingSheetItem:removeByTrainingSheetId', { training_sheet_id });
 
-        trainingSheetItemService.removeByTrainingSheetId({ training_sheet_id });
-
-        const trainingSheet = await trainingSheetRepository.removeTrainingSheet({ training_sheet_id });
+        const trainingSheet = await mediator.publish('trainingSheet:remove', { training_sheet_id });
 
         return trainingSheet;
     }
 
-    async getTrainingSheets({ user_id }: GetTrainingSheets ) {
+    async getTrainingSheets({ user_id }: GetTrainingSheets) {
         if (!user_id) throw new Error('Missing parameters');
 
-        const trainingSheets = await trainingSheetRepository.getTrainingSheet({ user_id });
+        const trainingSheets = await mediator.publish('trainingSheet:get', { user_id });
 
         return trainingSheets;
     }
@@ -49,7 +44,7 @@ class TrainingSheetService {
     async getTrainingSheetsDetails({ training_sheet_id }: HandleTrainingSheet) {
         if (!training_sheet_id) throw new Error('Missing parameters');
         
-        const trainingSheetItemsDetails = await trainingSheetItemService.getTraininingSheetItemsDetails({ training_sheet_id });
+        const trainingSheetItemsDetails = await mediator.publish('trainingSheetItem:getById', { training_sheet_id });
 
         return trainingSheetItemsDetails;
     }
@@ -57,7 +52,7 @@ class TrainingSheetService {
     async updateTrainingSheet({ training_sheet_id, name }: HandleTrainingSheet) {
         if (!training_sheet_id) throw new Error('Missing parameters');
 
-        const trainingSheet = await trainingSheetRepository.updateTrainingSheet({ training_sheet_id, name });
+        const trainingSheet = await mediator.publish('trainingSheet:update', { training_sheet_id, name });
 
         return trainingSheet;
     }

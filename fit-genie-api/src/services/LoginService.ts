@@ -1,18 +1,16 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
-import { UserRepository } from "../repository/UserRepository";
+import { mediator } from "../mediator/AppMediator";
 
 interface AuthRequest {
     email: string;
     password: string;
 }
 
-const userRepository = new UserRepository();
 class LoginService {
     async authenticate({ email, password }: AuthRequest) {
+        const user: { id: number, password: string, email: string, username: string } = await mediator.publish('user:findByEmail', email);
         
-        const user = await userRepository.findUserByEmail(email);
-
         if (!user) throw new Error('Credential Error');
 
         const passwordMatch = await compare(password, user.password);
@@ -27,23 +25,23 @@ class LoginService {
             process.env.JWT_SECRET,
             {
                 subject: String(user.id),
-                expiresIn: '15d'
+                expiresIn: '15d',
             }
-        )
+        );
 
         return { 
             id: user.id,
             username: user.username,
             email: user.email,
-            token: token,
-         }
+            token,
+        };
     }
 
     async myProfile(user_id: number) {
-        const user = await userRepository.findUserById(user_id);
+        const user = await mediator.publish('user:findById', user_id);
 
         return user;
     }
 }
 
-export { LoginService }
+export { LoginService };

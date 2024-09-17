@@ -1,5 +1,5 @@
 import { hash } from "bcryptjs";
-import { UserRepository } from "../repository/UserRepository";
+import { mediator } from "../mediator/AppMediator";
 
 interface CreateUserRequest {
     name: string;
@@ -7,21 +7,41 @@ interface CreateUserRequest {
     password: string;
 }
 
-const userRepository = new UserRepository();
+interface UpdateUserRequest {
+    userId: number;
+    image: string;
+}
+
 class UserService {
     async createUser({ name, email, password }: CreateUserRequest) {
-        if(!(name && email && password)) throw new Error("Missing parameters");
+        if (!(name && email && password)) throw new Error("Missing parameters");
 
-        const userAlreadyExists = await userRepository.findUserByEmail(email);
+        const userAlreadyExists = await mediator.publish('user:findByEmail', email);
 
         if (userAlreadyExists) throw new Error("User already exists");
 
         const passwordHash = await hash(password, 8);
 
-        const user = await userRepository.createUser({ name, email, passwordHash });
+        const user = await mediator.publish('user:create', { name, email, passwordHash });
 
-        return user
+        return user;
+    }
+
+    async updateUserPhoto({ userId, image }: UpdateUserRequest) {
+        if (!(userId && image)) throw new Error("Missing parameters");
+        const userIdAux = Number(userId);
+
+        const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
+        const photoBuffer = Buffer.from(base64Data, 'base64');
+
+        const userInfo = await mediator.publish('user:findById', userIdAux);
+
+        if (!userInfo) throw new Error("User not found");
+
+        const user = await mediator.publish('user:updatePhoto', { userId: userIdAux, image: photoBuffer });
+
+        return user;
     }
 }
 
-export { UserService }
+export { UserService };

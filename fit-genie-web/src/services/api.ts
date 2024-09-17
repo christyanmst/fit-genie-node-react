@@ -8,7 +8,7 @@ export function setupAPIClient(ctx?: GetServerSidePropsContext) {
     let cookies = parseCookies(ctx);
 
     const api = axios.create({
-        baseURL: 'https://fit-genie-node-react.up.railway.app',
+        baseURL: 'http://localhost:3333',
         headers: {
             Authorization: `Bearer ${cookies['@nextauth.token']}`
         }

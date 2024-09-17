@@ -14,26 +14,27 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  username   String    @db.VarChar(50)
-  email      String    @unique @db.VarChar(100)
-  password   String    @db.VarChar(60)
-  height     Decimal?   
-  weight     Decimal?   
-  created_at DateTime? @default(now())
-  updated_at DateTime? @default(now())
+  id              Int             @id @default(autoincrement())
+  username        String          @db.VarChar(50)
+  email           String          @unique @db.VarChar(100)
+  password        String          @db.VarChar(60)
+  height          Decimal?
+  weight          Decimal?
+  created_at      DateTime?       @default(now())
+  updated_at      DateTime?       @default(now())
   training_sheets TrainingSheet[]
-  checkin_hist CheckInHist[]
+  checkin_hist    CheckInHist[]
+  photo           Bytes?
 
   @@map("users")
 }
 
 model TrainingSheet {
-  id         Int       @id @default(autoincrement())
+  id         Int                 @id @default(autoincrement())
   user_id    Int
-  name       String   @db.VarChar(50)    
-  items TrainingSheetItem[]
-  created_at           DateTime? @default(now())
+  name       String              @db.VarChar(50)
+  items      TrainingSheetItem[]
+  created_at DateTime?           @default(now())
 
   user User @relation(fields: [user_id], references: [id])
 
@@ -41,24 +42,25 @@ model TrainingSheet {
 }
 
 model TrainingSheetItem {
-  id                   Int       @id @default(autoincrement())
-  training_sheet_id    Int    
-  name                 String    @db.VarChar(50)
-  description          String    @db.VarChar(250)
-  repetitions          Int
-  series               Int
-  link                 String?   @db.VarChar(250)
-  created_at           DateTime? @default(now())
-  updated_at           DateTime? @default(now())
-  training_sheet TrainingSheet @relation(fields: [training_sheet_id], references: [id])
+  id                Int           @id @default(autoincrement())
+  training_sheet_id Int
+  name              String        @db.VarChar(50)
+  description       String        @db.VarChar(250)
+  repetitions       Int
+  series            Int
+  link              String?       @db.VarChar(250)
+  created_at        DateTime?     @default(now())
+  updated_at        DateTime?     @default(now())
+  training_sheet    TrainingSheet @relation(fields: [training_sheet_id], references: [id])
 
   @@map("training_sheets_items")
 }
 
 model CheckInHist {
-  id                   Int       @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   user_id    Int
-  created_at           DateTime? @default(now())
-  user User @relation(fields: [user_id], references: [id])
+  created_at DateTime? @default(now())
+  user       User      @relation(fields: [user_id], references: [id])
+
   @@map("checkin_hist")
 }

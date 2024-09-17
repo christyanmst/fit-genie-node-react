@@ -1,13 +1,12 @@
-import { CheckInHistRepository } from "../repository/CheckInHistRepository";
+import { mediator } from "../mediator/AppMediator";
 
-const checkInHistRepository = new CheckInHistRepository();
 class CheckInHistService {
     async createCheckIn(params: { userId: number }) {
-       if (!params.userId) throw Error("Missing Parameters");
+        if (!params.userId) throw Error("Missing Parameters");
 
-       const checkInHist = await checkInHistRepository.createCheckIn(params);
+        const checkInHist = await mediator.publish('checkInHist:create', params);
 
-       return checkInHist;
+        return checkInHist;
     }
 
     async getCheckInHist(params: { userId: number }) {
@@ -15,7 +14,7 @@ class CheckInHistService {
 
         const today = new Date();
 
-        const checkInHist = await checkInHistRepository.getCheckInHist(params.userId, today.getFullYear());
+        const checkInHist = await mediator.publish('checkInHist:get', params.userId, today.getFullYear());
         
         const checkInsByMonth = {};
         checkInHist.forEach((record) => {
@@ -34,14 +33,15 @@ class CheckInHistService {
 
     async verifyCheckInToday(params: { userId: number }) {
         if (!params.userId) throw Error("Missing Parameters");
+        
         const today = new Date();
         const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
         
-        const checkInToday = await checkInHistRepository.verifyCheckInToday({ todayStart, todayEnd, userId: params.userId })
+        const checkInToday = await mediator.publish('checkInHist:verifyToday', { todayStart, todayEnd, userId: params.userId });
         
         return checkInToday;
     }
 }
 
-export { CheckInHistService }
+export { CheckInHistService };

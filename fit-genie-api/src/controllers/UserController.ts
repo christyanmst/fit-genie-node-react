@@ -11,6 +11,16 @@ class UserController {
 
         return res.json(user)
     }
+
+    async updatePhoto(req: Request, res: Response) {
+        const { userId, image } = req.body;
+
+        const userService = new UserService();
+
+        const user = await userService.updateUserPhoto({ userId, image });
+
+        return res.json(user)
+    }
 }
 
 export { UserController }

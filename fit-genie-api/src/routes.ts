@@ -6,7 +6,10 @@ import { TrainingSheetController } from "./controllers/TrainingSheetController";
 import { TrainingSheetItemController } from "./controllers/TrainingSheetItemController";
 import { isAuthenticated } from "./middlewares/isAuthenticated";
 import { CheckInHistController } from "./controllers/CheckInHistController";
-
+import './repository/UserRepository';
+import './repository/TrainingSheetRepository';
+import './repository/TrainingSheetItemRepository';
+import './repository/CheckInHistRepository';
 
 const router = Router();
 
@@ -15,7 +18,6 @@ const loginController = new LoginController();
 const trainingSheetController = new TrainingSheetController();
 const trainingSheetItemController = new TrainingSheetItemController();
 const checkInHistController = new CheckInHistController();
-
 
 // User
 router.post('/users', userController.createUser);
