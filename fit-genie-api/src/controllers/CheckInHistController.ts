@@ -1,32 +1,40 @@
 import { Request, Response } from "express";
-import { CheckInHistService } from "../services/CheckInHistService";
+import { appFacade } from "../facade/AppFacade";
 
-const checkInHistService = new CheckInHistService();
 
 
 class CheckInHistController {
     async createCheckIn(req: Request, res: Response) {
         const { userId } = req.body;
 
-        const checkIn = await checkInHistService.createCheckIn({ userId });
-
-        return res.json({ checkIn });
+        try {
+            const checkIn = await appFacade.createCheckIn(userId);
+            return res.json({ checkIn });
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     async getCheckInHist(req: Request, res: Response) {
         const userId = req.params.userId;
 
-        const checkInHist = await checkInHistService.getCheckInHist({ userId: Number(userId) });
-
-        return res.json({ checkInHist });
+        try {
+            const checkInHist = await appFacade.getCheckInHistory(Number(userId));
+            return res.json({ checkInHist });
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     async verifyCheckInToday(req: Request, res: Response) {
         const userId = req.params.userId;
 
-        const checkInToday = await checkInHistService.verifyCheckInToday({ userId: Number(userId) });
-
-        return res.json({ checkInToday });
+        try {
+            const checkInToday = await appFacade.verifyCheckInToday(Number(userId));
+            return res.json({ checkInToday });
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 }
 

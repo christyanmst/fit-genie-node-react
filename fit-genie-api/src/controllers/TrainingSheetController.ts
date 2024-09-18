@@ -1,57 +1,61 @@
 import { Request, Response } from "express";
-import { TrainingSheetService } from "../services/TrainingSheetService";
+import { appFacade } from "../facade/AppFacade"; // Import the facade
 
 class TrainingSheetController {
     async createOrder(req: Request, res: Response) {
         const { user_id, name } = req.body;
 
-        const trainingSheetService = new TrainingSheetService();
-
-        const trainingSheet = await trainingSheetService.createTrainingSheet({ user_id, name });
-        
-        return res.json(trainingSheet);
+        try {
+            const trainingSheet = await appFacade.createTrainingSheet(user_id, name);
+            return res.json(trainingSheet);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     async removeTrainingSheet(req: Request, res: Response) {
         const training_sheet_id = req.params.training_sheet_id;
 
-        const trainingSheetService = new TrainingSheetService();
-
-        const trainingSheet = await trainingSheetService.removeTrainingSheet({ training_sheet_id: Number(training_sheet_id) });
-        
-        return res.json(trainingSheet);
+        try {
+            const trainingSheet = await appFacade.removeTrainingSheet(Number(training_sheet_id));
+            return res.json(trainingSheet);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     async getTrainingSheetDetails(req: Request, res: Response) {
         const training_sheet_id = req.params.training_sheet_id;
 
-        const trainingSheetService = new TrainingSheetService();
-
-        const trainingSheetDetails = await trainingSheetService.getTrainingSheetsDetails({ training_sheet_id: Number(training_sheet_id) });
-    
-        return res.json(trainingSheetDetails);
+        try {
+            const trainingSheetDetails = await appFacade.getTrainingSheetDetails(Number(training_sheet_id));
+            return res.json(trainingSheetDetails);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     async getTrainingSheetsByUser(req: Request, res: Response) {
         const user_id = req.params.user_id;
 
-        const trainingSheetService = new TrainingSheetService();
-
-        const trainingSheets = await trainingSheetService.getTrainingSheets({ user_id: Number(user_id) });
-    
-        return res.json(trainingSheets);
+        try {
+            const trainingSheets = await appFacade.getTrainingSheetsByUser(Number(user_id));
+            return res.json(trainingSheets);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     async updateTrainingSheet(req: Request, res: Response) {
         const { training_sheet_id, name } = req.body;
 
-        const trainingSheetService = new TrainingSheetService();
-
-        const trainingSheets = await trainingSheetService.updateTrainingSheet({ training_sheet_id: Number(training_sheet_id), name });
-    
-        return res.json(trainingSheets);
+        try {
+            const trainingSheets = await appFacade.updateTrainingSheet(Number(training_sheet_id), name);
+            return res.json(trainingSheets);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
-
 }
 
-export { TrainingSheetController }
+export { TrainingSheetController };

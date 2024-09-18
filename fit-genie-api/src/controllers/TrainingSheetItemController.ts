@@ -1,36 +1,39 @@
 import { Request, Response } from "express";
-import { TrainingSheetItemsService } from "../services/TrainingSheetItemService";
+import { appFacade } from "../facade/AppFacade";
 
 class TrainingSheetItemController {
     async createTrainingSheetItems(req: Request, res: Response) {
         const { training_sheet_id, items } = req.body;
 
-        const trainingSheetItemService = new TrainingSheetItemsService();
-
-        const trainingSheetItems = await trainingSheetItemService.createTrainingSheetItems({ training_sheet_id, items });
-        
-        return res.json(trainingSheetItems);
+        try {
+            const trainingSheetItems = await appFacade.createTrainingSheetItems(training_sheet_id, items);
+            return res.json(trainingSheetItems);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     async updateTrainingSheetItems(req: Request, res: Response) {
         const { items } = req.body;
 
-        const trainingSheetItemService = new TrainingSheetItemsService();
-
-        const trainingSheetItems = await trainingSheetItemService.updateTrainingSheetItems({ items });
-        
-        return res.json(trainingSheetItems);
+        try {
+            const trainingSheetItems = await appFacade.updateTrainingSheetItems(items);
+            return res.json(trainingSheetItems);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 
     async removeTrainingSheetItems(req: Request, res: Response) {
         const { training_sheet_item_ids } = req.body;
 
-        const trainingSheetItemService = new TrainingSheetItemsService();
-
-        const trainingSheetItems = await trainingSheetItemService.removeTrainingSheetItems({ training_sheet_item_ids });
-        
-        return res.json(trainingSheetItems);
+        try {
+            const trainingSheetItems = await appFacade.removeTrainingSheetItems(training_sheet_item_ids);
+            return res.json(trainingSheetItems);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     }
 }
 
-export { TrainingSheetItemController }
+export { TrainingSheetItemController };

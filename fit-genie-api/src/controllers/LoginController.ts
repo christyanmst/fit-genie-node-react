@@ -1,29 +1,28 @@
 import { Request, Response } from "express";
-import { LoginService } from "../services/LoginService";
+import { appFacade } from "../facade/AppFacade";
 
 class LoginController {
-    async authenticate(req: Request, res: Response) {
-        const { email, password } = req.body;
+  async authenticate(req: Request, res: Response) {
+    const { email, password } = req.body;
 
-        const loginService = new LoginService();
-
-        const auth = await loginService.authenticate({
-            email,
-            password
-        });
-
-        return res.json(auth);
+    try {
+      const auth = await appFacade.authenticate(email, password);
+      return res.json(auth);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
     }
+  }
 
-    async myProfile(req: Request, res: Response) {
-        const user_id = req.user_id;
+  async myProfile(req: Request, res: Response) {
+    const user_id = req.user_id;
 
-        const loginService = new LoginService();
-
-        const profile = await loginService.myProfile(user_id);
-
-        return res.json(profile);
+    try {
+      const profile = await appFacade.getMyProfile(user_id);
+      return res.json(profile);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
     }
+  }
 }
 
-export { LoginController }
+export { LoginController };

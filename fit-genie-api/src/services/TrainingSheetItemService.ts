@@ -1,6 +1,6 @@
 import { mediator } from "../mediator/AppMediator";
 
-interface HandleTrainingSheetItems {
+export interface HandleTrainingSheetItems {
     training_sheet_id?: number;
     items: {
         id?: number;
