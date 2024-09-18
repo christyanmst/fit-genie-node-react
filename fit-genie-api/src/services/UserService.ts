@@ -57,7 +57,7 @@ class UserService {
     }
 
     async compressImageWithTinyPNG(imageBuffer: Buffer) {
-        const apiKey = "rdChPsCv1q8CtdLH382WZlQBypF1pSN0";
+        const apiKey = "";
         const apiEndpoint = `https://api.tinify.com/shrink`;
         const authHeader = "Basic " + Buffer.from(`api:${apiKey}`).toString('base64');
     
