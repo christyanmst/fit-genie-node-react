@@ -10,6 +10,9 @@ import './repository/UserRepository';
 import './repository/TrainingSheetRepository';
 import './repository/TrainingSheetItemRepository';
 import './repository/CheckInHistRepository';
+import multer from 'multer';
+
+const upload = multer();
 
 const router = Router();
 
@@ -21,6 +24,8 @@ const checkInHistController = new CheckInHistController();
 
 // User
 router.post('/users', userController.createUser);
+router.post('/users/update-photo', isAuthenticated, upload.single('file'), userController.updatePhoto);
+router.get('/users/get-photo/:user_id', isAuthenticated, userController.getUserPhoto);
 
 // Login
 router.get('/my-profile', isAuthenticated, loginController.myProfile);

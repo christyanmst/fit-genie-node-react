@@ -14,7 +14,7 @@ class CheckInHistService {
 
         const today = new Date();
 
-        const checkInHist = await mediator.publish('checkInHist:get', params.userId, today.getFullYear());
+        const checkInHist = await mediator.publish('checkInHist:get', { userId: params.userId, year: today.getFullYear() });
         
         const checkInsByMonth = {};
         checkInHist.forEach((record) => {

@@ -24,8 +24,12 @@ class AppFacade {
         return await this.userService.createUser({ name, email, password });
     }
 
-    async updateUserPhoto(userId: number, image: string) {
+    async updateUserPhoto(userId: number, image: Express.Multer.File) {
         return await this.userService.updateUserPhoto({ userId, image });
+    }
+
+    async getUserPhoto(userId: number) {
+        return await this.userService.getUserPhoto(userId);
     }
 
     async createCheckIn(userId: number) {

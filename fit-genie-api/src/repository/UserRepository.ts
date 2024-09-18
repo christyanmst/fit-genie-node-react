@@ -22,6 +22,10 @@ class UserRepository {
     mediator.on("user:updatePhoto", async (params: { userId: number; image: Buffer }) => {
         return await this.updatePhoto(params);
     });
+
+    mediator.on("user:getUserPhoto", async (userId: number) => {
+      return await this.getUserPhoto(userId);
+    });
   }
 
   async findUserByEmail(email: string) {
@@ -76,6 +80,19 @@ class UserRepository {
     });
 
     return user;
+  }
+
+  async getUserPhoto(userId: number) {
+    const userInfo = await prismaClient.user.findFirst({
+      where: {
+        id: userId,
+      },
+      select: {
+        photo: true
+      }
+    });
+
+    return userInfo;
   }
 }
 
