@@ -1,4 +1,3 @@
-import { Flex } from "rebass";
 import { BarChart, XAxis, YAxis, Bar, ResponsiveContainer, Tooltip } from "recharts";
 import styles from './styles.module.scss';
 import { toast } from "react-toastify";
@@ -6,6 +5,8 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { api } from "@/services/apiClient";
 import { Loader } from "@/components/ui/Loader";
+import { Flex } from 'reflexbox';
+
 
 export default function SearchForm() {
     const { user } = useContext(AuthContext);
